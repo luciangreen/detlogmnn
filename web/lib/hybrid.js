@@ -268,7 +268,7 @@ export class Hybrid {
       if (changes.length) {
         plan.route = 'Prolog'; plan.why = 'the round trip back to Prolog reports a change'; plan.notes.push(...changes.map((c) => c.msg ?? String(c)));
       } else {
-        plan.conv = conv; plan.q = q; plan.detlog = P.loadProgram(conv.text);
+        plan.conv = conv; plan.q = q; plan.detlog = P.loadProgram(conv.text); try { plan.detlog.pairwiseSource = P.loadProgram(conv.source); } catch (e) { /* the JIT then permutes in full */ }
         plan.warnings = conv.warnings.filter((w) => !w.pred || reached.has(w.pred)).map((w) => `${w.pred ?? ''} ${w.msg}`.trim());
       }
     }

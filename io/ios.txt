@@ -51,7 +51,7 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 25. run_edge("sum", "sum([1, x], S)")
    => {"answers":[],"output":"","error":"type_error(evaluable, x/0)","on":"Prolog","prolog_because":"the C and MNN routes disagreed (unchecked, the C route may leave its type contract), so Prolog decides","c_route_applies":true,"same_as_prolog":true}
 26. run_lists("nrev", "nrev([0,17,6], [2])")
-   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 27. run("fact", "fact(4, 120)")
    => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"fact(4, _O2), _O2 = 120","same_as_prolog":true}
 28. steadfast("label", "label/2", 2)
@@ -99,9 +99,9 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 49. run_edge("first_label", "first([2,3], even(3))")
    => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"first([2, 3], _O2), _O2 = even(3)","same_as_prolog":true}
 50. run_lists("nrev", "nrev([-4,10,17], [2])")
-   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 51. run("nrev", "nrev([8,14,17,2], R)")
-   => {"answers":["R = [2, 17, 14, 8]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":["R = [2, 17, 14, 8]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 52. steadfast("timed", "sum/2", 2)
    => {"ok":false,"why":"clause 1 of sum/2 has a value in argument 2"}
 53. point_one("max_safe", "max_safe(-4, 6, M)")
@@ -115,7 +115,7 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 57. run_edge("label", "label([2,3], even(2))")
    => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"label([2, 3], _O2), _O2 = even(2)","same_as_prolog":true}
 58. run_lists("nrev", "nrev([8,18], [2])")
-   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 59. run("label", "label([4|T], R)")
    => {"answers":["T = _A, R = even(4)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
 60. steadfast("evens", "evens/2", 1)
@@ -147,7 +147,7 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 73. run_edge("label", "label([1.0, 2], R)")
    => {"answers":[],"output":"","error":"type_error(integer, 1.0)","on":"Prolog","prolog_because":"an error on the converted route: Prolog decides errors","c_route_applies":false,"same_as_prolog":true}
 74. run_lists("nrev", "nrev([-6,-1], [1])")
-   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 75. run("fact", "fact(3, 6)")
    => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"fact(3, _O2), _O2 = 6","same_as_prolog":true}
 76. steadfast("grade", "grade/2", 1)
@@ -245,7 +245,7 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 122. run_lists("pick", "pick(X, [0,4,1,3])")
    => {"answers":["X = 4","X = 3"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
 123. run("nrev", "nrev([6,3,19,-7,3,15], R)")
-   => {"answers":["R = [15, 3, -7, 19, 3, 6]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":["R = [15, 3, -7, 19, 3, 6]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 124. steadfast("first_label", "first/2", 1)
    => {"ok":false,"why":"clause 1 of first/2: clause 1 of label/2: the output is used in a condition"}
 125. point_one("grade", "grade(51, G)")
@@ -259,7 +259,7 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 129. run_edge("label", "label([1.0, 2], R)")
    => {"answers":[],"output":"","error":"type_error(integer, 1.0)","on":"Prolog","prolog_because":"an error on the converted route: Prolog decides errors","c_route_applies":false,"same_as_prolog":true}
 130. run_lists("nrev", "nrev([10,2,15,11,-9], R)")
-   => {"answers":["R = [-9, 11, 15, 2, 10]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":["R = [-9, 11, 15, 2, 10]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 131. run("squares", "squares(2, L)")
    => {"answers":["L = [1, 4]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
 132. steadfast("squares", "squares/2", 2)
@@ -323,7 +323,7 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 161. run_edge("label", "label([], R)")
    => {"answers":["R = none"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
 162. run_lists("nrev", "nrev([18,0,8], R)")
-   => {"answers":["R = [8, 0, 18]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":["R = [8, 0, 18]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 163. run("greet", "greet(ann)")
    => {"answers":["true"],"output":"hello ann\n","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
 164. steadfast("fact", "fact/2", 2)
@@ -371,7 +371,7 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 185. run_edge("len", "len(L, 1)")
    => {"answers":["L = [_A]"],"output":"","error":"step limit (200000) exceeded","on":"Prolog","prolog_because":"the converted route reached its step limit: Prolog gives the answers it finds","c_route_applies":true,"same_as_prolog":true}
 186. run_lists("nrev", "nrev([-9,14,-4,-4,6], R)")
-   => {"answers":["R = [6, -4, -4, 14, -9]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":["R = [6, -4, -4, 14, -9]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 187. run("fib", "fib(8, 8)")
    => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 188. steadfast("label", "label/2", 2)
@@ -387,7 +387,7 @@ Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file
 193. run_edge("first_label", "first([2,3], even(3))")
    => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"first([2, 3], _O2), _O2 = even(3)","same_as_prolog":true}
 194. run_lists("nrev", "nrev([-5], R)")
-   => {"answers":["R = [-5]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+   => {"answers":["R = [-5]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
 195. run("greet", "greet(bob)")
    => {"answers":["true"],"output":"hello bob\n","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
 196. steadfast("squares", "squares/2", 2)
