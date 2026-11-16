@@ -15,7 +15,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
-      - run: node scripts/build.mjs
+      - name: Build the site
+        run: npm install --no-audit --no-fund && npm run site
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 17 }
       - uses: gradle/actions/setup-gradle@v4
@@ -27,12 +28,13 @@ jobs:
           path: shells/android/app/build/outputs/apk/debug/*.apk
 
   ios:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
-      - run: node scripts/build.mjs
+      - name: Build the site
+        run: npm install --no-audit --no-fund && npm run site
       - run: brew install xcodegen
       - name: Simulator build and unsigned device build
         working-directory: shells/ios
@@ -61,7 +63,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
-      - run: node scripts/build.mjs
+      - name: Build the site
+        run: npm install --no-audit --no-fund && npm run site
       - name: Build the desktop app
         working-directory: shells/electron
         env:

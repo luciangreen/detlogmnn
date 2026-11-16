@@ -3,7 +3,8 @@
 const { app, BrowserWindow, Menu, dialog, ipcMain, shell } = require('electron');
 const fs = require('fs');
 const path = require('path');
-const { handle } = require('./fsbridge');
+const { spawn } = require('child_process');
+const { handle, inside } = require('./fsbridge');
 
 const settingsFile = () => path.join(app.getPath('userData'), 'settings.json');
 const settings = () => { try { return JSON.parse(fs.readFileSync(settingsFile(), 'utf8')); } catch { return {}; } };
@@ -27,6 +28,25 @@ function create() {
 }
 
 ipcMain.handle('lucian-fs', (_e, req) => handle(root(), req || {}, { reveal: (p) => shell.showItemInFolder(p) }));
+
+// Commands on the computer (shellrun, the terminal, swipl), run in the files folder, as the LucianOS
+// server runs them: output and the end are sent back to the page as they happen.
+const running = new Map();
+ipcMain.handle('lucian-job-start', (e, id, spec) => {
+  const send = (event, data) => { if (!e.sender.isDestroyed()) e.sender.send('lucian-job-event', { id, event, data }); };
+  let cwd;
+  try { cwd = inside(root(), spec.cwd || ''); fs.mkdirSync(cwd, { recursive: true }); } catch (err) { send('end', { exitCode: 2, status: 'failed' }); return { ok: false, error: err.message }; }
+  const child = spawn(spec.cmd, spec.args || [], { cwd, env: { ...process.env, ...(spec.env || {}) }, windowsHide: true });
+  running.set(id, child);
+  child.stdout.on('data', (d) => send('output', { stream: 'stdout', text: d.toString() }));
+  child.stderr.on('data', (d) => send('output', { stream: 'stderr', text: d.toString() }));
+  child.on('error', (err) => { send('output', { stream: 'stderr', text: `${spec.cmd}: ${err.message}\n` }); });
+  child.on('close', (code, signal) => { running.delete(id); send('end', { exitCode: code, signal, status: signal ? 'cancelled' : code === 0 ? 'done' : 'failed' }); });
+  if (spec.stdin === false) child.stdin.end();
+  return { ok: true };
+});
+ipcMain.handle('lucian-job-input', (_e, id, text) => { running.get(id)?.stdin.write(text); return { ok: true }; });
+ipcMain.handle('lucian-job-cancel', (_e, id) => { running.get(id)?.kill(); return { ok: true }; });
 
 function menu() {
   const isMac = process.platform === 'darwin';

@@ -149,17 +149,23 @@ export async function openFiles(app = 'LucianOS') {
   const t = bridgeTransport();
   if (t) return new BridgeFiles(t);
   if (globalThis.indexedDB && globalThis.showDirectoryPicker) {
-    try {
+    try { // (IndexedDB may be missing on file://: then the folder is chosen again each visit)
       const h = await idb('readonly', (s) => s.get(app));
       if (h && (await h.queryPermission({ mode: 'readwrite' })) === 'granted') return new HandleFiles(h, 'folder', h.name);
     } catch { /* fall through */ }
   }
   if (globalThis.navigator?.storage?.getDirectory) {
-    const root = await navigator.storage.getDirectory();
-    navigator.storage.persist?.().catch(() => {});
-    return new HandleFiles(await root.getDirectoryHandle(app, { create: true }), 'opfs', 'this browser on this device');
+    try {
+      const root = await navigator.storage.getDirectory();
+      navigator.storage.persist?.().catch(() => {});
+      return new HandleFiles(await root.getDirectoryHandle(app, { create: true }), 'opfs', 'this browser on this device');
+    } catch { /* a page opened from the file system has no browser storage in some browsers */ }
   }
-  return new MemoryFiles();
+  // nowhere to keep files: they last while the page is open (choose a folder to keep them)
+  const m = new MemoryFiles();
+  m.where = 'only while this page is open';
+  m.kind = 'memory';
+  return m;
 }
 
 // Can this browser use a folder on the computer? (Chrome and Edge on a computer.)
@@ -168,7 +174,7 @@ export const canPickFolder = () => !!globalThis.showDirectoryPicker && !bridgeTr
 // Asks for a folder on the computer and remembers it. Must be called from a click.
 export async function pickFolder(app = 'LucianOS') {
   const h = await showDirectoryPicker({ id: app, mode: 'readwrite', startIn: 'documents' });
-  await idb('readwrite', (s) => s.put(h, app));
+  await idb('readwrite', (s) => s.put(h, app)).catch(() => {});
   return new HandleFiles(h, 'folder', h.name);
 }
 // A remembered folder whose permission lapsed (after a browser restart): ask again, from a click.

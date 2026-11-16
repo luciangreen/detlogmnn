@@ -5,7 +5,10 @@
   "description": "Detlog MNN for Mac, Windows and Linux: the site in a desktop window, with files in a folder on the computer.",
   "main": "main.js",
   "license": "BSD-3-Clause",
-  "author": "Lucian Green",
+  "author": {
+    "name": "Lucian Green",
+    "email": "noreply@github.com"
+  },
   "scripts": {
     "start": "node copy-site.js && electron .",
     "dist": "node copy-site.js && electron-builder --publish never"
@@ -17,9 +20,41 @@
   "build": {
     "appId": "com.luciangreen.detlogmnn",
     "productName": "Detlog MNN",
-    "files": ["main.js", "preload.js", "fsbridge.js", "site/**/*"],
-    "mac": { "target": ["dmg", "zip"], "category": "public.app-category.developer-tools", "icon": "site/icons/icon-512.png" },
-    "win": { "target": ["nsis", "zip"], "icon": "site/icons/icon-512.png" },
-    "linux": { "target": ["AppImage", "deb"], "category": "Development", "icon": "site/icons/icon-512.png", "maintainer": "Lucian Green" }
+    "files": [
+      "main.js",
+      "preload.js",
+      "fsbridge.js",
+      "site/**/*"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.developer-tools",
+      "icon": "site/icons/icon-512.png"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "icon": "site/icons/icon-512.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Development",
+      "icon": "site/icons/icon-512.png",
+      "maintainer": "Lucian Green"
+    },
+    "publish": null
+  },
+  "homepage": "https://github.com/luciangreen/detlogmnn",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luciangreen/detlogmnn.git"
   }
 }

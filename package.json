@@ -6,6 +6,7 @@
   "type": "module",
   "license": "BSD-3-Clause",
   "scripts": {
+    "site": "node scripts/build.mjs",
     "build": "node scripts/build.mjs",
     "test": "node --test test/*.test.js",
     "ios": "node io/make-ios.mjs"

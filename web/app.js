@@ -175,7 +175,7 @@ async function startFiles() {
 }
 async function showWhere() {
   const w = $('#where');
-  w.replaceChildren(el('span', { textContent: `Files: ${state.files.kind === 'opfs' ? 'stored in this browser on this device' : await state.files.root()}` }));
+  w.replaceChildren(el('span', { textContent: `Files: ${state.files.kind === 'opfs' ? 'stored in this browser on this device' : state.files.kind === 'memory' ? 'not kept: this page was opened from a file, so choose a folder, or use the web page or app' : await state.files.root()}` }));
   if (canPickFolder()) {
     w.append(el('button', { textContent: state.files.kind === 'folder' ? 'Choose another folder' : 'Use a folder on this computer', onclick: async () => { try { state.files = await pickFolder(APP); showWhere(); showFolder(''); } catch { /* cancelled */ } } }));
     if (state.files.kind !== 'folder' && localStorage.getItem('dm.hadFolder')) w.append(el('button', { textContent: 'Reopen my folder', onclick: async () => { const f = await reopenFolder(APP); if (f) { state.files = f; showWhere(); showFolder(''); } } }));
