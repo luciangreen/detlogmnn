@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#c2410c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Detlog MNN">
+<title>Detlog MNN</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-tab="program">
+<header class="top">
+  <img src="icons/icon.svg" alt="" class="logo">
+  <h1>Detlog MNN</h1>
+  <span id="filename" class="filename"></span>
+</header>
+
+<main class="panes">
+  <section id="pane-files" class="pane" aria-label="Files">
+    <div id="where" class="where"></div>
+    <div class="bar"><nav id="crumbs" class="crumbs"></nav></div>
+    <div class="bar"><button id="newfolder">New folder</button><button id="import">Import…</button></div>
+    <ul id="filelist" class="filelist"></ul>
+  </section>
+
+  <section id="pane-program" class="pane" aria-label="Program">
+    <div class="bar">
+      <button id="new">New</button><button id="save">Save</button><button id="saveas">Save as…</button>
+      <span class="hint">:- consult(file). loads other files from here</span>
+    </div>
+    <textarea id="program" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Prolog program"></textarea>
+  </section>
+
+  <section id="pane-run" class="pane" aria-label="Run">
+    <form class="ask" onsubmit="return false">
+      <span class="prompt">?-</span>
+      <input id="query" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" enterkeyhint="go" aria-label="Query">
+      <button id="run" class="primary" type="button">Run</button>
+    </form>
+    <div class="bar options">
+      <label><input type="checkbox" id="check"> Check against Prolog</label>
+      <button id="prove" type="button">Prove</button>
+    </div>
+    <div id="examples" class="chips"></div>
+    <div id="results" class="results"></div>
+  </section>
+
+  <section id="pane-plan" class="pane" aria-label="Plan">
+    <div id="plan" class="plan"></div>
+    <div id="proof" class="plan"></div>
+    <details class="about">
+      <summary>How queries run</summary>
+      <p>Each query runs on the faster of two exact routes. The <b>C route</b> is pl2detlog's native tier: the analysis of its Prolog → Detlog → C export, compiled to JavaScript. It applies where the type contract holds (ground inputs, fresh outputs) and bails out anywhere else. The <b>MNN route</b> is the proved Detlog MNN rewrite. The first run times both, checks that they agree, and keeps the faster.</p>
+      <p><b>Prolog</b> runs what the conversion can't keep exact: conversion errors, programs that assert or retract, anything the round trip back to Prolog reports as lost, and any error, so errors are always Prolog's own.</p>
+      <p><b>Point 1:</b> a query with an output already given, like <code>label([2,3], even(3))</code>, is run as <code>label([2,3], R), R = even(3)</code>: compute, then unify. This is used only where the output is proved steadfast, and here gives <code>false</code>, as Prolog does.</p>
+      <p><code>time(Goal)</code> reports inferences, time and the route used.</p>
+    </details>
+  </section>
+</main>
+
+<nav class="tabs" aria-label="Views">
+  <button data-tab="program">Program</button>
+  <button data-tab="run">Run</button>
+  <button data-tab="plan">Plan</button>
+  <button data-tab="files">Files</button>
+</nav>
+<script src="lib/pl2detlog.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
