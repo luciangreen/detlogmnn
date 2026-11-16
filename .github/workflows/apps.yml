@@ -16,6 +16,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: Build the site
+        shell: bash
         run: npm install --no-audit --no-fund && npm run site
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 17 }
@@ -34,6 +35,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: Build the site
+        shell: bash
         run: npm install --no-audit --no-fund && npm run site
       - run: brew install xcodegen
       - name: Simulator build and unsigned device build
@@ -64,6 +66,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - name: Build the site
+        shell: bash
         run: npm install --no-audit --no-fund && npm run site
       - name: Build the desktop app
         working-directory: shells/electron

@@ -5,8 +5,9 @@
 //   node scripts/build.mjs
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const web = path.join(root, 'web');
 const out = path.join(root, 'dist');
 const read = (f) => fs.readFileSync(f, 'utf8');
@@ -57,6 +58,6 @@ export function build() {
   return html.length;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(new URL(import.meta.url).pathname)) {
+if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url))) {
   console.log(`built dist/index.html (${(build() / 1024).toFixed(0)} KB)`);
 }
