@@ -44,6 +44,7 @@
     </form>
     <div class="bar options">
       <label><input type="checkbox" id="check"> Check against Prolog</label>
+      <label title="The C route tests its type contract as it runs. Off (the default), it tests nothing: faster, and a query outside the contract is caught on its first run, when the C and MNN routes disagree."><input type="checkbox" id="checked"> Runtime checks</label>
       <button id="prove" type="button">Prove</button>
     </div>
     <div id="examples" class="chips"></div>
@@ -55,7 +56,7 @@
     <div id="proof" class="plan"></div>
     <details class="about">
       <summary>How queries run</summary>
-      <p>Each query runs on the faster of two exact routes. The <b>C route</b> is pl2detlog's native tier: the analysis of its Prolog → Detlog → C export, compiled to JavaScript. It applies where the type contract holds (ground inputs, fresh outputs) and bails out anywhere else. The <b>MNN route</b> is the proved Detlog MNN rewrite. The first run times both, checks that they agree, and keeps the faster.</p>
+      <p>Each query runs on the faster of two exact routes. The <b>C route</b> is pl2detlog's native tier: the analysis of its Prolog → Detlog → C export, compiled to JavaScript. It applies where the type contract holds (ground inputs, fresh outputs). It runs without runtime checks unless <b>Runtime checks</b> is on; a query outside the contract is then caught on its first run, when the C and MNN routes disagree, and Prolog decides. The <b>MNN route</b> is the proved Detlog MNN rewrite. The first run times both, and plain Prolog too, checks that they agree, and keeps the fastest: where the determinism rewrites make a query slower, Prolog runs it.</p>
       <p><b>Prolog</b> runs what the conversion can't keep exact: conversion errors, programs that assert or retract, anything the round trip back to Prolog reports as lost, and any error, so errors are always Prolog's own.</p>
       <p><b>Point 1:</b> a query with an output already given, like <code>label([2,3], even(3))</code>, is run as <code>label([2,3], R), R = even(3)</code>: compute, then unify. This is used only where the output is proved steadfast, and here gives <code>false</code>, as Prolog does.</p>
       <p><code>time(Goal)</code> reports inferences, time and the route used.</p>

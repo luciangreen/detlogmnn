@@ -65,6 +65,9 @@ query.addEventListener('keydown', (e) => {
   }
 });
 $('#check').checked = state.check;
+$('#checked').checked = localStorage.getItem('dm.checked') === '1';
+state.hybrid.setChecked($('#checked').checked);
+$('#checked').onchange = (e) => { localStorage.setItem('dm.checked', e.target.checked ? '1' : '0'); state.hybrid.setChecked(e.target.checked); };
 $('#check').onchange = (e) => { state.check = e.target.checked; localStorage.setItem('dm.check', state.check ? '1' : '0'); };
 $('#run').onclick = () => run();
 $('#prove').onclick = () => prove();
@@ -128,7 +131,7 @@ function showPlan(plan, r) {
     row('Route', `${r.route}${r.why ? ` — ${r.why}` : ''}`),
     row('Run as', plan.runAs !== plan.query ? plan.runAs : null),
     ...(plan.pointOne ?? []).map((o) => row(`Point 1, argument ${o.arg}`, `steadfast: ${o.why}`)),
-    row('Times', t ? `C route ${t.c.toFixed(3)} ms · MNN route ${t.mnn.toFixed(3)} ms${t.nativeUsed ? '' : ' (no call met the C contract, so both ran as MNN)'}` : null),
+    row('Times', t ? `C route ${t.c.toFixed(3)} ms · MNN route ${t.mnn.toFixed(3)} ms${t.prolog != null ? ` · Prolog ${t.prolog.toFixed(3)} ms` : ''}${t.nativeUsed ? '' : ' (no call met the C contract, so the C route ran as MNN)'}` : null),
     row('Rewrites', plan.rewrites?.length ? el('ul', {}, ...plan.rewrites.map((w) => el('li', { textContent: w }))) : null),
     row('Warnings', plan.warnings?.length ? el('ul', {}, ...plan.warnings.map((w) => el('li', { textContent: w }))) : null),
     row('Notes', plan.notes?.length ? el('ul', {}, ...plan.notes.map((w) => el('li', { textContent: w }))) : null)));

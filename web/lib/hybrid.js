@@ -221,8 +221,11 @@ function limit(P, steps, ms) {
 const tidy = (e) => (e ? String(e).replace(/^step limit \(time limit ([\d.]+ s)\) exceeded$/, 'time limit ($1) exceeded') : e);
 
 export class Hybrid {
-  constructor(P, { stepLimit = 3e6, timeLimitMs = 10000, maxAnswers = 1000 } = {}) {
-    this.P = P; this.stepLimit = stepLimit; this.timeLimitMs = timeLimitMs; this.maxAnswers = maxAnswers;
+  // checked: the C route tests its type contract at run time (pl2detlog's P.DETLOG_CHECKED); unchecked,
+  // the default, it tests nothing, and a query outside the contract is caught when the C and MNN routes
+  // disagree on its first run (Prolog then decides), or by Check against Prolog
+  constructor(P, { stepLimit = 3e6, timeLimitMs = 10000, maxAnswers = 1000, checked = false } = {}) {
+    this.P = P; this.stepLimit = stepLimit; this.timeLimitMs = timeLimitMs; this.maxAnswers = maxAnswers; this.checked = checked;
     installTime(P);
     this.setProgram('');
   }
@@ -280,10 +283,12 @@ export class Hybrid {
     r.error = tidy(r.error);
     return r;
   }
+  setChecked(on) { this.checked = !!on; this.plans = new Map(); }
   runDetlog(plan, native) {
     const P = this.P;
     const was = P.DETLOG_NATIVE;
     P.DETLOG_NATIVE = native;
+    P.DETLOG_CHECKED = this.checked; // read when the plan's program is compiled
     try { const r = P.runDetlogFast(plan.detlog, plan.q.pred, plan.q.vars, { stepLimit: limit(P, this.stepLimit, this.timeLimitMs) }); r.error = tidy(r.error); return r; } finally { P.DETLOG_NATIVE = was; }
   }
 
@@ -306,11 +311,19 @@ export class Hybrid {
       const m = /limit/.test(c.r.error ?? '') ? c : time(P, () => this.runDetlog(plan, false));
       const nativeUsed = P.nativeModesOf(plan.detlog).length > 0;
       plan.timing = { c: c.ms, mnn: m.ms, nativeUsed };
+      // Prolog too: the determinism rewrites are dropped where plain Prolog is faster
+      const p = /limit/.test(m.r.error ?? '') ? null : time(P, () => this.runProlog(text));
+      plan.timing.prolog = p ? p.ms : null;
       if (c.r.error && !m.r.error) { plan.pick = 'MNN'; plan.why = `the C route raised ${c.r.error}`; }
-      else if (!sameAnswers(c.r, m.r)) { plan.route = 'Prolog'; plan.why = 'the two routes disagreed, so Prolog decides'; res = this.runProlog(text); route = 'Prolog'; }
+      else if (!sameAnswers(c.r, m.r)) { plan.route = 'Prolog'; plan.why = 'the C and MNN routes disagreed (unchecked, the C route may leave its type contract), so Prolog decides'; res = this.runProlog(text); route = 'Prolog'; }
       else if (!nativeUsed) { plan.pick = 'MNN'; plan.why = 'no call here meets the C route\'s type contract (ground inputs, fresh outputs)'; }
       else { plan.pick = c.ms <= m.ms ? 'C' : 'MNN'; plan.why = `faster on this query (C ${c.ms.toFixed(3)} ms, MNN ${m.ms.toFixed(3)} ms)`; }
-      if (!res) { res = plan.pick === 'C' ? c.r : m.r; route = plan.pick; }
+      if (!res && p && !p.r.error && !m.r.error && sameAnswers(p.r, m.r) && p.ms < Math.min(c.ms, m.ms)) {
+        plan.pick = 'Prolog'; plan.why = `plain Prolog is faster on this query (Prolog ${p.ms.toFixed(3)} ms, C ${c.ms.toFixed(3)} ms, MNN ${m.ms.toFixed(3)} ms)`;
+      }
+      if (!res) { res = plan.pick === 'C' ? c.r : plan.pick === 'Prolog' ? p.r : m.r; route = plan.pick; }
+    } else if (plan.pick === 'Prolog') {
+      res = this.runProlog(text); route = 'Prolog';
     } else {
       res = this.runDetlog(plan, plan.pick === 'C'); route = plan.pick;
     }

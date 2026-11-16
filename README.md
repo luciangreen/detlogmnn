@@ -17,8 +17,14 @@ built by the **Apps** workflow: open a run and download them from its Artifacts.
 | **MNN** | The proved Detlog MNN rewrite, run by pl2detlog's JIT. Full terms and unification, no choice points. | Everything the conversion keeps exact. |
 | **Prolog** | pl2detlog's reference Prolog engine. | Conversion errors, queries that reach `assert`/`retract`, anything the round trip back to Prolog reports as missing, and every error, so errors are always Prolog's own. Also queries with endless answers (`len(L, 1)`): the converted routes work out every answer first and reach their limit, while Prolog gives the answers it finds. |
 
-The first run of a query times the C and MNN routes, checks that their answers agree (if not,
-Prolog decides), and keeps the faster one for later runs. **Check against Prolog** also runs Prolog
+The first run of a query times the C and MNN routes and plain Prolog, checks that their answers
+agree (if the C and MNN routes don't, Prolog decides), and keeps the fastest for later runs. So where
+the determinism rewrites make a query slower, plain Prolog runs it.
+
+**No runtime checks by default.** The C route assumes its type contract and tests nothing as it runs
+(no type, overflow or zero-divisor tests). A query outside the contract, such as one whose results go
+past 2^53, is caught on its first run, when the C and MNN routes disagree, and Prolog decides. Turn on
+**Runtime checks** to have the C route test the contract itself and bail out to the MNN route. **Check against Prolog** also runs Prolog
 and compares, and **Prove** shows pl2detlog's proof checks and round trip for the recent queries.
 
 ### Exactness

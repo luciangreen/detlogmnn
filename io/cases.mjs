@@ -67,12 +67,13 @@ const runOut = (name, query) => {
   const p = res.plan;
   return {
     answers: res.answers, output: res.output, error: res.error,
-    on: res.route === 'Prolog' ? 'Prolog' : 'converted',
-    prolog_because: res.route === 'Prolog' ? res.why : undefined,
+    // which of C, MNN and Prolog was fastest depends on the machine: recorded only when Prolog had to run it
+    on: res.route === 'Prolog' && p.pick !== 'Prolog' ? 'Prolog' : 'the fastest exact route',
+    prolog_because: res.route === 'Prolog' && p.pick !== 'Prolog' ? res.why : undefined,
     c_route_applies: p.timing ? p.timing.nativeUsed : undefined,
     point_one: p.pointOne.length ? p.runAs : undefined,
     // the numbers and which converted route won depend on the machine
-    time_line: res.timeLine ? res.timeLine.replace(/\d[\d,]*(\.\d+)?|Infinite/g, '#').replace(/\[(C|MNN)\]/, '[C or MNN]') : undefined,
+    time_line: res.timeLine ? res.timeLine.replace(/\d[\d,]*(\.\d+)?|Infinite/g, '#').replace(/\[(C|MNN|Prolog)\]/, '[the fastest route]') : undefined,
     same_as_prolog: res.check.same
   };
 };
@@ -87,21 +88,7 @@ export const cases = [
   {
     name: 'run',
     make: (r) => { const name = r.pick(Object.keys(QUERIES)); return [name, QUERIES[name](r)]; },
-    run: (name, query) => {
-      const h = hybridFor(name);
-      const res = h.run(query, { check: true });
-      const p = res.plan;
-      return {
-        answers: res.answers, output: res.output, error: res.error,
-        on: res.route === 'Prolog' ? 'Prolog' : 'converted',
-        prolog_because: res.route === 'Prolog' ? res.why : undefined,
-        c_route_applies: p.timing ? p.timing.nativeUsed : undefined,
-        point_one: p.pointOne.length ? p.runAs : undefined,
-        // the numbers and which converted route won depend on the machine
-        time_line: res.timeLine ? res.timeLine.replace(/\d[\d,]*(\.\d+)?|Infinite/g, '#').replace(/\[(C|MNN)\]/, '[C or MNN]') : undefined,
-        same_as_prolog: res.check.same
-      };
-    }
+    run: runOut
   },
   {
     name: 'steadfast',
