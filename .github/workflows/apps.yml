@@ -1,0 +1,87 @@
+name: Apps
+# Builds the site and the apps that load it: Android (APK), iPhone/iPad (simulator app and an unsigned
+# device build to sign in Xcode), and the desktop app for Mac, Windows and Linux. Each run's apps are
+# under the run's Artifacts.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Build the site
+        shell: bash
+        run: npm install --no-audit --no-fund && npm run site
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: gradle/actions/setup-gradle@v4
+        with: { gradle-version: '8.9' }
+      - run: gradle -p shells/android assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: detlogmnn-android
+          path: shells/android/app/build/outputs/apk/debug/*.apk
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Build the site
+        shell: bash
+        run: npm install --no-audit --no-fund && npm run site
+      - run: brew install xcodegen
+      - name: Simulator build and unsigned device build
+        working-directory: shells/ios
+        run: |
+          xcodegen generate
+          xcodebuild -project detlogmnn.xcodeproj -scheme App -sdk iphonesimulator -configuration Debug -derivedDataPath build/sim CODE_SIGNING_ALLOWED=NO build | tail -20
+          xcodebuild -project detlogmnn.xcodeproj -scheme App -sdk iphoneos -configuration Release -derivedDataPath build/dev CODE_SIGNING_ALLOWED=NO build | tail -20
+          mkdir -p out/Payload
+          cp -R "build/dev/Build/Products/Release-iphoneos/Detlog MNN.app" out/Payload/
+          (cd out && zip -qr "detlogmnn-unsigned.ipa" Payload)
+          (cd "build/sim/Build/Products/Debug-iphonesimulator" && zip -qr "$GITHUB_WORKSPACE/shells/ios/out/detlogmnn-simulator.zip" "Detlog MNN.app")
+      - uses: actions/upload-artifact@v4
+        with:
+          name: detlogmnn-ios
+          path: |
+            shells/ios/out/*.ipa
+            shells/ios/out/*.zip
+
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Build the site
+        shell: bash
+        run: npm install --no-audit --no-fund && npm run site
+      - name: Build the desktop app
+        working-directory: shells/electron
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm install --no-audit --no-fund
+          npm run dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: detlogmnn-desktop-${{ matrix.os }}
+          path: |
+            shells/electron/dist/*.dmg
+            shells/electron/dist/*.zip
+            shells/electron/dist/*.exe
+            shells/electron/dist/*.AppImage
+            shells/electron/dist/*.deb

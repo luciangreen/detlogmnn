@@ -1,0 +1,14 @@
+{
+  "name": "detlogmnn",
+  "version": "1.0.0",
+  "description": "Detlog MNN: a Prolog converter and interpreter that runs each query on the faster of two exact routes (Prolog to C, as JavaScript, and Detlog MNN), with Prolog for the rest. Runs from a web page, with files on the device.",
+  "private": true,
+  "type": "module",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "site": "node scripts/build.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.js",
+    "ios": "node io/make-ios.mjs"
+  }
+}

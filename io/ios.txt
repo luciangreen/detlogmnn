@@ -1,0 +1,402 @@
+Detlog MNN: 200 inputs and outputs, from real runs (npm run ios writes this file; npm test checks it).
+
+1. run_edge("fact", "fact(20, F)")
+   => {"answers":["F = 2432902008176640000"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+2. run_lists("label", "label([20,20,-1], R)")
+   => {"answers":["R = even(20)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+3. run("sum", "sum([], S)")
+   => {"answers":["S = 0"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+4. steadfast("label", "label/2", 2)
+   => {"ok":true,"why":"committed, then each branch bound (B: computed then bound (A: =))"}
+5. point_one("nrev", "nrev([-3,10], R)")
+   => {"run_as":"nrev([-3,10], R)","outputs":[]}
+6. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+7. time_line(4972671, 0.5, "Prolog")
+   => "% 4,972,671 inferences, 0.001 CPU in 0.001 seconds (100% CPU, 9,945,342,000 Lips) [Prolog]\n"
+8. files([["write","b.txt","x(3)."],["remove","dir/c.pl"]])
+   => {"log":["ok","ok"],"tree":["b.txt"]}
+9. run_edge("label", "label(L, R)")
+   => {"answers":[],"output":"","error":"instantiation_error","on":"Prolog","prolog_because":"an error on the converted route: Prolog decides errors","c_route_applies":false,"same_as_prolog":true}
+10. run_lists("label", "label([16,-2,20,12], R)")
+   => {"answers":["R = even(16)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+11. run("counter", "noted(L)")
+   => {"answers":["L = []"],"output":"","error":null,"on":"Prolog","prolog_because":"the program changes its own clauses (assert/retract), which the conversion can't keep exact","same_as_prolog":true}
+12. steadfast("sum", "sum/2", 2)
+   => {"ok":false,"why":"clause 1 of sum/2 has a value in argument 2"}
+13. point_one("first_label", "first([-6,3], even(2))")
+   => {"run_as":"first([-6, 3], _O2), _O2 = even(2)","outputs":[2]}
+14. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- include('lib/maths.pl').\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+15. time_line(2657720, 0, "Prolog")
+   => "% 2,657,720 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [Prolog]\n"
+16. files([["write","a.pl","x(3)."],["write","a.pl","x(6)."],["write","a.pl","x(2)."]])
+   => {"log":["ok","ok","ok"],"tree":["a.pl"]}
+17. run_edge("label", "label([a, 2], R)")
+   => {"answers":[],"output":"","error":"type_error(evaluable, a/0)","on":"Prolog","prolog_because":"an error on the converted route: Prolog decides errors","c_route_applies":false,"same_as_prolog":true}
+18. run_lists("len", "len([-6,6,6,-3], N)")
+   => {"answers":["N = 4"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+19. run("timed", "time(sum([8,0,1,0,9], S))")
+   => {"answers":["S = 18"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"time_line":"% # inferences, # CPU in # seconds (#% CPU, # Lips) [the fastest route]\n","same_as_prolog":true}
+20. steadfast("fib", "fib/2", 2)
+   => {"ok":false,"why":"clause 1 of fib/2 has a value in argument 2"}
+21. point_one("label", "label([9|T], R)")
+   => {"run_as":"label([9|T], R)","outputs":[]}
+22. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+23. time_line(3345317, 0.5, "MNN")
+   => "% 3,345,317 inferences, 0.001 CPU in 0.001 seconds (100% CPU, 6,690,634,000 Lips) [MNN]\n"
+24. files([["write","b.txt","x(9)."],["write","b.txt","x(1)."]])
+   => {"log":["ok","ok"],"tree":["b.txt"]}
+25. run_edge("sum", "sum([1, x], S)")
+   => {"answers":[],"output":"","error":"type_error(evaluable, x/0)","on":"Prolog","prolog_because":"the C and MNN routes disagreed (unchecked, the C route may leave its type contract), so Prolog decides","c_route_applies":true,"same_as_prolog":true}
+26. run_lists("nrev", "nrev([0,17,6], [2])")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+27. run("fact", "fact(4, 120)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"fact(4, _O2), _O2 = 120","same_as_prolog":true}
+28. steadfast("label", "label/2", 2)
+   => {"ok":true,"why":"committed, then each branch bound (B: computed then bound (A: =))"}
+29. point_one("grade", "grade(53, b)")
+   => {"run_as":"grade(53, _O2), _O2 = b","outputs":[2]}
+30. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+31. time_line(1793791, 0.5, "MNN")
+   => "% 1,793,791 inferences, 0.001 CPU in 0.001 seconds (100% CPU, 3,587,582,000 Lips) [MNN]\n"
+32. files([["read","dir/c.pl"],["rename","a.pl","moved.pl"],["write","dir/c.pl","x(3)."],["write","dir/c.pl","x(9)."]])
+   => {"log":["error: no file dir/c.pl","ok","ok","ok"],"tree":[{"dir":["c.pl"]}]}
+33. run_edge("label", "label([2,3], even(2))")
+   => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"label([2, 3], _O2), _O2 = even(2)","same_as_prolog":true}
+34. run_lists("first_label", "first([-8,6,2,14], R)")
+   => {"answers":["R = even(-8)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+35. run("counter", "note(2)")
+   => {"answers":["true"],"output":"","error":null,"on":"Prolog","prolog_because":"the program changes its own clauses (assert/retract), which the conversion can't keep exact","same_as_prolog":true}
+36. steadfast("evens", "evens/2", 1)
+   => {"ok":false,"why":"clause 1 of evens/2 has a value in argument 1"}
+37. point_one("grade", "grade(50, c)")
+   => {"run_as":"grade(50, _O2), _O2 = c","outputs":[2]}
+38. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- include('lib/maths.pl').\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+39. time_line(212184, 0, "MNN")
+   => "% 212,184 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [MNN]\n"
+40. files([["write","dir/c.pl","x(6)."],["write","a.pl","x(4)."],["rename","dir/sub/d.pl","dir/moved.pl"],["read","a.pl"],["read","a.pl"],["rename","dir/c.pl","moved.pl"]])
+   => {"log":["ok","ok","ok","x(4).","x(4).","ok"],"tree":["a.pl","moved.pl"]}
+41. run_edge("label", "label([2], none)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"label([2], _O2), _O2 = none","same_as_prolog":true}
+42. run_lists("len", "len(L, 1)")
+   => {"answers":["L = [_A]"],"output":"","error":"step limit (200000) exceeded","on":"Prolog","prolog_because":"the converted route reached its step limit: Prolog gives the answers it finds","c_route_applies":true,"same_as_prolog":true}
+43. run("counter", "noted(L)")
+   => {"answers":["L = []"],"output":"","error":null,"on":"Prolog","prolog_because":"the program changes its own clauses (assert/retract), which the conversion can't keep exact","same_as_prolog":true}
+44. steadfast("label", "label/2", 2)
+   => {"ok":true,"why":"committed, then each branch bound (B: computed then bound (A: =))"}
+45. point_one("first_label", "first([1,18,16,9], even(4))")
+   => {"run_as":"first([1, 18, 16, 9], _O2), _O2 = even(4)","outputs":[2]}
+46. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- include('lib/maths.pl').\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+47. time_line(1025419, 0, "Prolog")
+   => "% 1,025,419 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [Prolog]\n"
+48. files([["write","dir/c.pl","x(6)."],["write","dir/sub/d.pl","x(3)."]])
+   => {"log":["ok","ok"],"tree":[{"dir":[{"sub":["d.pl"]},"c.pl"]}]}
+49. run_edge("first_label", "first([2,3], even(3))")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"first([2, 3], _O2), _O2 = even(3)","same_as_prolog":true}
+50. run_lists("nrev", "nrev([-4,10,17], [2])")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+51. run("nrev", "nrev([8,14,17,2], R)")
+   => {"answers":["R = [2, 17, 14, 8]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+52. steadfast("timed", "sum/2", 2)
+   => {"ok":false,"why":"clause 1 of sum/2 has a value in argument 2"}
+53. point_one("max_safe", "max_safe(-4, 6, M)")
+   => {"run_as":"max_safe(-4, 6, M)","outputs":[]}
+54. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+55. time_line(3901780, 0.5, "C")
+   => "% 3,901,780 inferences, 0.001 CPU in 0.001 seconds (100% CPU, 7,803,560,000 Lips) [C]\n"
+56. files([["write","a.pl","x(1)."],["read","b.txt"],["remove","a.pl"],["remove","dir/c.pl"]])
+   => {"log":["ok","error: no file b.txt","ok","ok"],"tree":[]}
+57. run_edge("label", "label([2,3], even(2))")
+   => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"label([2, 3], _O2), _O2 = even(2)","same_as_prolog":true}
+58. run_lists("nrev", "nrev([8,18], [2])")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+59. run("label", "label([4|T], R)")
+   => {"answers":["T = _A, R = even(4)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+60. steadfast("evens", "evens/2", 1)
+   => {"ok":false,"why":"clause 1 of evens/2 has a value in argument 1"}
+61. point_one("label", "label([7], even(0))")
+   => {"run_as":"label([7], _O2), _O2 = even(0)","outputs":[2]}
+62. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+63. time_line(2929271, 0, "MNN")
+   => "% 2,929,271 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [MNN]\n"
+64. files([["remove","dir/c.pl"],["mkdir","dir"],["rename","dir/sub/d.pl","moved.pl"],["rename","b.txt","moved.pl"]])
+   => {"log":["ok","ok","ok","ok"],"tree":[{"dir":[]}]}
+65. run_edge("fact", "fact(20, F)")
+   => {"answers":["F = 2432902008176640000"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+66. run_lists("len", "len(L, 1)")
+   => {"answers":["L = [_A]"],"output":"","error":"step limit (200000) exceeded","on":"Prolog","prolog_because":"the converted route reached its step limit: Prolog gives the answers it finds","c_route_applies":true,"same_as_prolog":true}
+67. run("greet", "greet(bob)")
+   => {"answers":["true"],"output":"hello bob\n","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+68. steadfast("pick", "pick/2", 1)
+   => {"ok":false,"why":"clause 1 of pick/2: the output is used before its value is computed"}
+69. point_one("max_of", "max_of(8, -5, M)")
+   => {"run_as":"max_of(8, -5, M)","outputs":[]}
+70. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+71. time_line(4111235, 1000, "C")
+   => "% 4,111,235 inferences, 1.000 CPU in 1.000 seconds (100% CPU, 4,111,235 Lips) [C]\n"
+72. files([["write","dir/c.pl","x(5)."],["mkdir","new"],["remove","a.pl"],["rename","b.txt","dir/moved.pl"]])
+   => {"log":["ok","ok","ok","ok"],"tree":[{"dir":["c.pl"]},{"new":[]}]}
+73. run_edge("label", "label([1.0, 2], R)")
+   => {"answers":[],"output":"","error":"type_error(integer, 1.0)","on":"Prolog","prolog_because":"an error on the converted route: Prolog decides errors","c_route_applies":false,"same_as_prolog":true}
+74. run_lists("nrev", "nrev([-6,-1], [1])")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+75. run("fact", "fact(3, 6)")
+   => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"fact(3, _O2), _O2 = 6","same_as_prolog":true}
+76. steadfast("grade", "grade/2", 1)
+   => {"ok":false,"why":"clause 1 of grade/2: the output is used in a condition"}
+77. point_one("sum", "sum([1, x], S)")
+   => {"run_as":"sum([1, x], S)","outputs":[]}
+78. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(missing).\nmain(X, Y) :- twice(X, Y).")
+   => {"error":"can't find missing.pl to consult"}
+79. time_line(3728196, 0, "C")
+   => "% 3,728,196 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [C]\n"
+80. files([["write","dir/c.pl","x(1)."],["write","b.txt","x(3)."],["write","a.pl","x(6)."],["read","dir/sub/d.pl"]])
+   => {"log":["ok","ok","ok","error: no file dir/sub/d.pl"],"tree":[{"dir":["c.pl"]},"a.pl","b.txt"]}
+81. run_edge("first_label", "first([2,3], even(3))")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"first([2, 3], _O2), _O2 = even(3)","same_as_prolog":true}
+82. run_lists("len", "len(L, 2)")
+   => {"answers":["L = [_A, _B]"],"output":"","error":"step limit (200000) exceeded","on":"Prolog","prolog_because":"the converted route reached its step limit: Prolog gives the answers it finds","c_route_applies":true,"same_as_prolog":true}
+83. run("fact", "fact(6, 720)")
+   => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"fact(6, _O2), _O2 = 720","same_as_prolog":true}
+84. steadfast("squares", "squares/2", 1)
+   => {"ok":false,"why":"clause 1 of squares/2: the last goal findall/3 is not a program predicate"}
+85. point_one("first_label", "first([13,-8,-2,16,9,14], R)")
+   => {"run_as":"first([13,-8,-2,16,9,14], R)","outputs":[]}
+86. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- [lists, 'lib/maths'].\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+87. time_line(225931, 1000, "C")
+   => "% 225,931 inferences, 1.000 CPU in 1.000 seconds (100% CPU, 225,931 Lips) [C]\n"
+88. files([["write","b.txt","x(1)."],["remove","dir/sub/d.pl"],["write","dir/sub/d.pl","x(6)."],["write","a.pl","x(8)."]])
+   => {"log":["ok","ok","ok","ok"],"tree":[{"dir":[{"sub":["d.pl"]}]},"a.pl","b.txt"]}
+89. run_edge("fact", "fact(30, F)")
+   => {"answers":["F = 265252859812191058636308480000000"],"output":"","error":null,"on":"Prolog","prolog_because":"the C and MNN routes disagreed (unchecked, the C route may leave its type contract), so Prolog decides","c_route_applies":true,"same_as_prolog":true}
+90. run_lists("pick", "pick(X, [2])")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+91. run("timed", "time(sum([1,7,0,5,3], S))")
+   => {"answers":["S = 16"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"time_line":"% # inferences, # CPU in # seconds (#% CPU, # Lips) [the fastest route]\n","same_as_prolog":true}
+92. steadfast("max_of", "max_of/3", 1)
+   => {"ok":false,"why":"clause 1 of max_of/3 shares argument 1 with another argument"}
+93. point_one("max_safe", "max_safe(3, -3, M)")
+   => {"run_as":"max_safe(3, -3, M)","outputs":[]}
+94. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- [lists, 'lib/maths'].\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+95. time_line(1721286, 0, "MNN")
+   => "% 1,721,286 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [MNN]\n"
+96. files([["read","a.pl"],["rename","a.pl","dir/moved.pl"]])
+   => {"log":["error: no file a.pl","ok"],"tree":[]}
+97. run_edge("label", "label([2], none)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"label([2], _O2), _O2 = none","same_as_prolog":true}
+98. run_lists("label", "label([15,10], R)")
+   => {"answers":["R = even(10)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+99. run("sum", "sum([1, x], S)")
+   => {"answers":[],"output":"","error":"type_error(evaluable, x/0)","on":"Prolog","prolog_because":"the C and MNN routes disagreed (unchecked, the C route may leave its type contract), so Prolog decides","c_route_applies":true,"same_as_prolog":true}
+100. steadfast("max_of", "max_of/3", 1)
+   => {"ok":false,"why":"clause 1 of max_of/3 shares argument 1 with another argument"}
+101. point_one("max_safe", "max_safe(-3, 4, M)")
+   => {"run_as":"max_safe(-3, 4, M)","outputs":[]}
+102. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- [lists, 'lib/maths'].\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+103. time_line(2228126, 0.5, "MNN")
+   => "% 2,228,126 inferences, 0.001 CPU in 0.001 seconds (100% CPU, 4,456,252,000 Lips) [MNN]\n"
+104. files([["write","b.txt","x(7)."],["mkdir","new"],["write","dir/sub/d.pl","x(2)."]])
+   => {"log":["ok","ok","ok"],"tree":[{"dir":[{"sub":["d.pl"]}]},{"new":[]},"b.txt"]}
+105. run_edge("max_of", "max_of(5, 3, 3)")
+   => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+106. run_lists("sum", "sum([1, x], S)")
+   => {"answers":[],"output":"","error":"type_error(evaluable, x/0)","on":"Prolog","prolog_because":"the C and MNN routes disagreed (unchecked, the C route may leave its type contract), so Prolog decides","c_route_applies":true,"same_as_prolog":true}
+107. run("grade", "grade(94, G)")
+   => {"answers":["G = a"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+108. steadfast("greet", "greet/1", 1)
+   => {"ok":false,"why":"clause 1 of greet/1: the last goal format/2 is not a program predicate"}
+109. point_one("max_of", "max_of(7, 9, M)")
+   => {"run_as":"max_of(7, 9, M)","outputs":[]}
+110. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- [lists, 'lib/maths'].\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+111. time_line(703273, 12.3456, "MNN")
+   => "% 703,273 inferences, 0.012 CPU in 0.012 seconds (100% CPU, 56,965,478 Lips) [MNN]\n"
+112. files([["rename","dir/sub/d.pl","dir/moved.pl"],["read","dir/c.pl"],["write","dir/sub/d.pl","x(8)."],["read","dir/sub/d.pl"],["write","dir/c.pl","x(5)."],["rename","dir/c.pl","moved.pl"]])
+   => {"log":["ok","error: no file dir/c.pl","ok","x(8).","ok","ok"],"tree":[{"dir":[{"sub":["d.pl"]}]},"moved.pl"]}
+113. run_edge("label", "label([-4,1], R)")
+   => {"answers":["R = even(-4)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+114. run_lists("sum", "sum([0], 0)")
+   => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+115. run("label", "label([4], none)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"label([4], _O2), _O2 = none","same_as_prolog":true}
+116. steadfast("first_label", "label/2", 2)
+   => {"ok":true,"why":"committed, then each branch bound (B: computed then bound (A: =))"}
+117. point_one("label", "label([-2], R)")
+   => {"run_as":"label([-2], R)","outputs":[]}
+118. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+119. time_line(2924985, 1000, "C")
+   => "% 2,924,985 inferences, 1.000 CPU in 1.000 seconds (100% CPU, 2,924,985 Lips) [C]\n"
+120. files([["mkdir","new"],["write","b.txt","x(3)."],["write","b.txt","x(9)."],["write","dir/c.pl","x(7)."]])
+   => {"log":["ok","ok","ok","ok"],"tree":[{"dir":["c.pl"]},{"new":[]},"b.txt"]}
+121. run_edge("fact", "fact(30, F)")
+   => {"answers":["F = 265252859812191058636308480000000"],"output":"","error":null,"on":"Prolog","prolog_because":"the C and MNN routes disagreed (unchecked, the C route may leave its type contract), so Prolog decides","c_route_applies":true,"same_as_prolog":true}
+122. run_lists("pick", "pick(X, [0,4,1,3])")
+   => {"answers":["X = 4","X = 3"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+123. run("nrev", "nrev([6,3,19,-7,3,15], R)")
+   => {"answers":["R = [15, 3, -7, 19, 3, 6]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+124. steadfast("first_label", "first/2", 1)
+   => {"ok":false,"why":"clause 1 of first/2: clause 1 of label/2: the output is used in a condition"}
+125. point_one("grade", "grade(51, G)")
+   => {"run_as":"grade(51, G)","outputs":[]}
+126. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+127. time_line(3874091, 12.3456, "Prolog")
+   => "% 3,874,091 inferences, 0.012 CPU in 0.012 seconds (100% CPU, 313,803,379 Lips) [Prolog]\n"
+128. files([["write","dir/sub/d.pl","x(4)."],["write","dir/sub/d.pl","x(5)."],["rename","dir/c.pl","dir/moved.pl"]])
+   => {"log":["ok","ok","ok"],"tree":[{"dir":[{"sub":["d.pl"]}]}]}
+129. run_edge("label", "label([1.0, 2], R)")
+   => {"answers":[],"output":"","error":"type_error(integer, 1.0)","on":"Prolog","prolog_because":"an error on the converted route: Prolog decides errors","c_route_applies":false,"same_as_prolog":true}
+130. run_lists("nrev", "nrev([10,2,15,11,-9], R)")
+   => {"answers":["R = [-9, 11, 15, 2, 10]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+131. run("squares", "squares(2, L)")
+   => {"answers":["L = [1, 4]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+132. steadfast("squares", "squares/2", 2)
+   => {"ok":false,"why":"clause 1 of squares/2: the last goal findall/3 is not a program predicate"}
+133. point_one("first_label", "first([-7,4,4], even(1))")
+   => {"run_as":"first([-7, 4, 4], _O2), _O2 = even(1)","outputs":[2]}
+134. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- [lists, 'lib/maths'].\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+135. time_line(4880158, 0, "Prolog")
+   => "% 4,880,158 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [Prolog]\n"
+136. files([["remove","b.txt"],["write","b.txt","x(8)."],["write","dir/c.pl","x(6)."]])
+   => {"log":["ok","ok","ok"],"tree":[{"dir":["c.pl"]},"b.txt"]}
+137. run_edge("grade", "grade(x, G)")
+   => {"answers":[],"output":"","error":"type_error(evaluable, x/0)","on":"Prolog","prolog_because":"the C and MNN routes disagreed (unchecked, the C route may leave its type contract), so Prolog decides","c_route_applies":true,"same_as_prolog":true}
+138. run_lists("sum", "sum([17,8,11,10,16], S)")
+   => {"answers":["S = 62"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+139. run("max_safe", "max_safe(5, 2, 0)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"max_safe(5, 2, _O3), _O3 = 0","same_as_prolog":true}
+140. steadfast("pick", "pick/2", 2)
+   => {"ok":false,"why":"clause 1 of pick/2: the output is used before its value is computed"}
+141. point_one("max_of", "max_of(7, 0, 2)")
+   => {"run_as":"max_of(7, 0, 2)","outputs":[]}
+142. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- [lists, 'lib/maths'].\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+143. time_line(3519999, 12.3456, "Prolog")
+   => "% 3,519,999 inferences, 0.012 CPU in 0.012 seconds (100% CPU, 285,121,744 Lips) [Prolog]\n"
+144. files([["write","b.txt","x(7)."],["remove","a.pl"],["remove","a.pl"],["write","a.pl","x(3)."]])
+   => {"log":["ok","ok","ok","ok"],"tree":["a.pl","b.txt"]}
+145. run_edge("label", "label([-4,1], R)")
+   => {"answers":["R = even(-4)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+146. run_lists("len", "len(L, 2)")
+   => {"answers":["L = [_A, _B]"],"output":"","error":"step limit (200000) exceeded","on":"Prolog","prolog_because":"the converted route reached its step limit: Prolog gives the answers it finds","c_route_applies":true,"same_as_prolog":true}
+147. run("fact", "fact(3, 6)")
+   => {"answers":["true"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"fact(3, _O2), _O2 = 6","same_as_prolog":true}
+148. steadfast("nrev", "nrev/2", 2)
+   => {"ok":false,"why":"clause 1 of nrev/2 has a value in argument 2"}
+149. point_one("max_safe", "max_safe(6, 1, 2)")
+   => {"run_as":"max_safe(6, 1, _O3), _O3 = 2","outputs":[3]}
+150. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(missing).\nmain(X, Y) :- twice(X, Y).")
+   => {"error":"can't find missing.pl to consult"}
+151. time_line(1580249, 0, "Prolog")
+   => "% 1,580,249 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [Prolog]\n"
+152. files([["write","dir/sub/d.pl","x(8)."],["rename","dir/sub/d.pl","moved.pl"],["write","a.pl","x(5)."]])
+   => {"log":["ok","ok","ok"],"tree":["a.pl","moved.pl"]}
+153. run_edge("max_safe", "max_safe(5, 3, 3)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"max_safe(5, 3, _O3), _O3 = 3","same_as_prolog":true}
+154. run_lists("evens", "evens([19,-6], R)")
+   => {"answers":["R = [-6]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+155. run("label", "label([10,10,1], R)")
+   => {"answers":["R = even(10)"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+156. steadfast("len", "len/2", 2)
+   => {"ok":false,"why":"clause 1 of len/2 has a value in argument 2"}
+157. point_one("first_label", "first([3,5], even(7))")
+   => {"run_as":"first([3, 5], _O2), _O2 = even(7)","outputs":[2]}
+158. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+159. time_line(4083722, 0.5, "Prolog")
+   => "% 4,083,722 inferences, 0.001 CPU in 0.001 seconds (100% CPU, 8,167,444,000 Lips) [Prolog]\n"
+160. files([["rename","a.pl","moved.pl"],["rename","dir/sub/d.pl","dir/moved.pl"],["rename","dir/sub/d.pl","moved.pl"],["write","b.txt","x(5)."]])
+   => {"log":["ok","ok","ok","ok"],"tree":["b.txt"]}
+161. run_edge("label", "label([], R)")
+   => {"answers":["R = none"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+162. run_lists("nrev", "nrev([18,0,8], R)")
+   => {"answers":["R = [8, 0, 18]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+163. run("greet", "greet(ann)")
+   => {"answers":["true"],"output":"hello ann\n","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+164. steadfast("fact", "fact/2", 2)
+   => {"ok":true,"why":"committed, then each branch bound (B: computed then bound (A: =), computed then bound (A: is))"}
+165. point_one("first_label", "first([4,9,-6,10,-1], R)")
+   => {"run_as":"first([4,9,-6,10,-1], R)","outputs":[]}
+166. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+167. time_line(4112435, 0, "Prolog")
+   => "% 4,112,435 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [Prolog]\n"
+168. files([["write","a.pl","x(9)."],["remove","b.txt"],["write","dir/c.pl","x(4)."]])
+   => {"log":["ok","ok","ok"],"tree":[{"dir":["c.pl"]},"a.pl"]}
+169. run_edge("max_safe", "max_safe(5, 3, 3)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"point_one":"max_safe(5, 3, _O3), _O3 = 3","same_as_prolog":true}
+170. run_lists("sum", "sum([5,4], 3)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+171. run("max_of", "max_of(8, -5, M)")
+   => {"answers":["M = 8"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+172. steadfast("timed", "sum/2", 1)
+   => {"ok":false,"why":"clause 1 of sum/2 has a value in argument 1"}
+173. point_one("first_label", "first([3,15,17,15], R)")
+   => {"run_as":"first([3,15,17,15], R)","outputs":[]}
+174. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- [lists, 'lib/maths'].\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n% ---- lib/maths.pl ----\nsq(X, Y) :- Y is X * X.\n% ---- end of lib/maths.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+175. time_line(83415, 1000, "C")
+   => "% 83,415 inferences, 1.000 CPU in 1.000 seconds (100% CPU, 83,415 Lips) [C]\n"
+176. files([["remove","dir/sub/d.pl"],["mkdir","new"],["remove","a.pl"]])
+   => {"log":["ok","ok","ok"],"tree":[{"new":[]}]}
+177. run_edge("label", "label([2,3], even(3))")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"label([2, 3], _O2), _O2 = even(3)","same_as_prolog":true}
+178. run_lists("label", "label(L, R)")
+   => {"answers":[],"output":"","error":"instantiation_error","on":"Prolog","prolog_because":"an error on the converted route: Prolog decides errors","c_route_applies":false,"same_as_prolog":true}
+179. run("max_of", "max_of(4, 3, 2)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+180. steadfast("evens", "evens/2", 2)
+   => {"ok":false,"why":"clause 1 of evens/2 has a value in argument 2"}
+181. point_one("fact", "fact(16, F)")
+   => {"run_as":"fact(16, F)","outputs":[]}
+182. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nmain(X, Y) :- twice(X, Y)."
+183. time_line(690906, 2500.5, "Prolog")
+   => "% 690,906 inferences, 2.501 CPU in 2.501 seconds (100% CPU, 276,307 Lips) [Prolog]\n"
+184. files([["remove","dir/c.pl"],["mkdir","dir"],["mkdir","new"],["read","dir/c.pl"],["remove","dir/c.pl"]])
+   => {"log":["ok","ok","ok","error: no file dir/c.pl","ok"],"tree":[{"dir":[]},{"new":[]}]}
+185. run_edge("len", "len(L, 1)")
+   => {"answers":["L = [_A]"],"output":"","error":"step limit (200000) exceeded","on":"Prolog","prolog_because":"the converted route reached its step limit: Prolog gives the answers it finds","c_route_applies":true,"same_as_prolog":true}
+186. run_lists("nrev", "nrev([-9,14,-4,-4,6], R)")
+   => {"answers":["R = [6, -4, -4, 14, -9]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+187. run("fib", "fib(8, 8)")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+188. steadfast("label", "label/2", 2)
+   => {"ok":true,"why":"committed, then each branch bound (B: computed then bound (A: =))"}
+189. point_one("fact", "fact(2, 1)")
+   => {"run_as":"fact(2, _O2), _O2 = 1","outputs":[2]}
+190. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+191. time_line(2207261, 0, "Prolog")
+   => "% 2,207,261 inferences, 0.000 CPU in 0.000 seconds (100% CPU, Infinite Lips) [Prolog]\n"
+192. files([["rename","dir/c.pl","moved.pl"],["write","b.txt","x(4)."]])
+   => {"log":["ok","ok"],"tree":["b.txt"]}
+193. run_edge("first_label", "first([2,3], even(3))")
+   => {"answers":[],"output":"","error":null,"on":"the fastest exact route","c_route_applies":false,"point_one":"first([2, 3], _O2), _O2 = even(3)","same_as_prolog":true}
+194. run_lists("nrev", "nrev([-5], R)")
+   => {"answers":["R = [-5]"],"output":"","error":null,"on":"the fastest exact route","c_route_applies":true,"same_as_prolog":true}
+195. run("greet", "greet(bob)")
+   => {"answers":["true"],"output":"hello bob\n","error":null,"on":"the fastest exact route","c_route_applies":false,"same_as_prolog":true}
+196. steadfast("squares", "squares/2", 2)
+   => {"ok":false,"why":"clause 1 of squares/2: the last goal findall/3 is not a program predicate"}
+197. point_one("first_label", "first([19,-6,8,-2], R)")
+   => {"run_as":"first([19,-6,8,-2], R)","outputs":[]}
+198. consult({"lists.pl":"twice(X, Y) :- Y is 2 * X.","lib/maths.pl":"sq(X, Y) :- Y is X * X.","again.pl":":- consult(lists).\nthrice(X, Y) :- Y is 3 * X."}, ":- consult(again).\n:- consult(lists).\nmain(X, Y) :- twice(X, Y).")
+   => "% ---- again.pl ----\n% ---- lists.pl ----\ntwice(X, Y) :- Y is 2 * X.\n% ---- end of lists.pl ----\n\nthrice(X, Y) :- Y is 3 * X.\n% ---- end of again.pl ----\n\n% lists.pl already consulted\n\nmain(X, Y) :- twice(X, Y)."
+199. time_line(1847778, 0.5, "MNN")
+   => "% 1,847,778 inferences, 0.001 CPU in 0.001 seconds (100% CPU, 3,695,556,000 Lips) [MNN]\n"
+200. files([["write","dir/sub/d.pl","x(7)."],["mkdir","dir"],["mkdir","dir"],["mkdir","dir"],["rename","b.txt","dir/moved.pl"]])
+   => {"log":["ok","ok","ok","ok","ok"],"tree":[{"dir":[{"sub":["d.pl"]}]}]}

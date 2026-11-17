@@ -1,0 +1,27 @@
+# The iPhone and iPad app, as an XcodeGen spec: `xcodegen generate` makes detlogmnn.xcodeproj.
+# The site (../../dist, made by `node scripts/build.mjs`) is copied in as the folder "site".
+name: detlogmnn
+options:
+  bundleIdPrefix: com.luciangreen
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  App:
+    type: application
+    scheme: {}
+    platform: iOS
+    sources:
+      - path: App
+      - path: ../../dist
+        name: site
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_NAME: "Detlog MNN"
+        PRODUCT_BUNDLE_IDENTIFIER: com.luciangreen.detlogmnn
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
+        INFOPLIST_FILE: App/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: NO
